@@ -495,21 +495,22 @@ class SwinTransformerBlock3D(nn.Module):
             x: Input feature, tensor size (B, D, H, W, C).
             mask_matrix: Attention mask for cyclic shift.
         """
+        with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
 
-        shortcut = x
-        if not self.jump_attention:
+            shortcut = x
+            if not self.jump_attention:
+                if self.use_checkpoint:
+                    x = checkpoint.checkpoint(
+                        self.forward_part1, x, mask_matrix, resized_window_size
+                    )
+                else:
+                    x = self.forward_part1(x, mask_matrix, resized_window_size)
+                x = shortcut + self.drop_path(x)
+
             if self.use_checkpoint:
-                x = checkpoint.checkpoint(
-                    self.forward_part1, x, mask_matrix, resized_window_size
-                )
+                x = x + checkpoint.checkpoint(self.forward_part2, x)
             else:
-                x = self.forward_part1(x, mask_matrix, resized_window_size)
-            x = shortcut + self.drop_path(x)
-
-        if self.use_checkpoint:
-            x = x + checkpoint.checkpoint(self.forward_part2, x)
-        else:
-            x = x + self.forward_part2(x)
+                x = x + self.forward_part2(x)
 
         return x
 
