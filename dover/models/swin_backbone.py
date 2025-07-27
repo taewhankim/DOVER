@@ -496,7 +496,6 @@ class SwinTransformerBlock3D(nn.Module):
             mask_matrix: Attention mask for cyclic shift.
         """
         with torch.autocast(device_type="cuda", dtype=torch.bfloat16):
-
             shortcut = x
             if not self.jump_attention:
                 if self.use_checkpoint:
