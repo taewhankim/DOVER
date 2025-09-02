@@ -332,7 +332,6 @@ class ViewDecompositionDataset(torch.utils.data.Dataset):
         self.weight = opt.get("weight", 0.5)
         
         self.fully_supervised = opt.get("fully_supervised", False)
-        print("Fully supervised:", self.fully_supervised)
         
         self.video_infos = []
         self.ann_file = opt["anno_file"]
