@@ -90,7 +90,6 @@ class DOVER(nn.Module):
                 # b = build_x_clip_model(**backbone[key])
             else:
                 raise NotImplementedError
-            print("Setting backbone:", key + "_backbone")
             setattr(self, key + "_backbone", b)
         if divide_head:
             for key in backbone:
@@ -98,7 +97,6 @@ class DOVER(nn.Module):
                 if key not in self.backbone_preserve_keys:
                     continue
                 b = VQAHead(pre_pool=pre_pool, **vqa_head)
-                print("Setting head:", key + "_head")
                 setattr(self, key + "_head", b)
         else:
             if var:

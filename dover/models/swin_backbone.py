@@ -923,7 +923,7 @@ class SwinTransformer3D(nn.Module):
             )
 
         msg = self.load_state_dict(state_dict, strict=False)
-        print(msg)
+        # print(msg)
         print(f"=> loaded successfully '{self.pretrained}'")
         del checkpoint
         torch.cuda.empty_cache()
