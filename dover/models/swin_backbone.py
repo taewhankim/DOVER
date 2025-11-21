@@ -57,7 +57,6 @@ def get_adaptive_window_size(
     tw, hw, ww = base_window_size
     tx_, hx_, wx_ = input_x_size
     tx, hx, wx = base_x_size
-    print((tw * tx_) // tx, (hw * hx_) // hx, (ww * wx_) // wx)
     return (tw * tx_) // tx, (hw * hx_) // hx, (ww * wx_) // wx
 
 
@@ -924,7 +923,6 @@ class SwinTransformer3D(nn.Module):
 
         msg = self.load_state_dict(state_dict, strict=False)
         # print(msg)
-        print(f"=> loaded successfully '{self.pretrained}'")
         del checkpoint
         torch.cuda.empty_cache()
 
@@ -954,7 +952,6 @@ class SwinTransformer3D(nn.Module):
             k for k in clean_dict.keys() if "relative_position_bias_table" in k
         ]
         for k in relative_position_bias_table_keys:
-            print(k)
             relative_position_bias_table_pretrained = clean_dict[k]
             relative_position_bias_table_current = model_state_dict[k]
             L1, nH1 = relative_position_bias_table_pretrained.size()
@@ -1003,7 +1000,6 @@ class SwinTransformer3D(nn.Module):
         self.load_state_dict(clean_dict, strict=strict)
 
     def init_weights(self, pretrained=None):
-        print(self.pretrained, self.pretrained2d)
         """Initialize the weights in backbone.
 
         Args:
